@@ -14,7 +14,7 @@
             <button><img src="images/search.png"></button>
         </div>
         <div class = "weather">
-            <img src = "images/clear.png" class="weather-icon">
+            <img src = "images/clouds.png" class="weather-icon">
             <h1 class = "temp">88°F</h1>
             <h2 class = "city">Texas</h2>
             <div class="details">
@@ -38,16 +38,32 @@
     
     <script>
         const apiKey = "7408c53ed57949faa93204343231006";
-        const apiUrl = "http://api.weatherapi.com/v1/current.json?key=" + apiKey + "&q=Texas";
+        const apiUrl = "http://api.weatherapi.com/v1/current.json?key=" + apiKey + "&q=";
+
+        /** These two lines add functionality to the search bar and button**/
+        const searchBox = document.querySelector(".search input");
+        const searchBtn = document.querySelector(".search button");
+
     
-        async function checkWeather() {
-            const response = await fetch(apiUrl);
+        async function checkWeather(city) {
+            const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
             const data = await response.json();
             
             console.log(data);
+
+            /** these allow for program to pull information about weather from API and display on the specific sections of the app**/
+            document.querySelector(".city").innerHTML = data.location.name;
+            
+            document.querySelector(".temp").innerHTML = data.current.temp_f + "°F";
+
+            document.querySelector(".humidity").innerHTML = data.current.humidity + "%";
+
+            document.querySelector(".wind").innerHTML = data.current.wind_mph + " mph";
         }
-    
-        checkWeather();
+        
+        searchBtn.addEventListener("click", () => {
+            checkWeather(searchBox.value); /**this line will give the city name writen in input field. It will pass the city name in the checkWeather function at the top**/
+        })
     </script>
 </body>
 </html>
